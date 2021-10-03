@@ -1,20 +1,37 @@
 import React from 'react'
+import {Grid, Image, Text} from '../elements';
 
 const Post = (props) => {
   return (
     <React.Fragment>
-        <div>
-          user profile / user name / insert_dt / is_me (edit btn)
-        </div>
-        <div>
-          contents
-        </div>
-        <div>
-          image
-        </div>
-        <div>
-          comment cnt
-        </div>
+        <Grid>
+          <Grid is_flex>
+            <Image shape="circle" src={props.src}/>
+            <Text bold>{props.user_info.user_name}</Text>
+            <Text>{props.insert_dp}</Text>
+          </Grid>
+          <Grid padding="16px">
+            <Text>{props.contents}</Text>
+          </Grid>
+          <Grid>
+            <Image shape="rectangle" src={props.src}/>
+          </Grid>
+          <Grid padding="16px">
+            <Text bold>Comments: {props.comment_cnt}</Text>
+          </Grid>
+          <div>
+            user profile / user name / insert_dt
+          </div>
+          <div>
+            contents
+          </div>
+          <div>
+            image
+          </div>
+          <div>
+            comment cnt
+          </div>
+        </Grid>
     </React.Fragment>
   )
 }
