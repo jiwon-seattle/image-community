@@ -18,7 +18,7 @@ const Login = (props) => {
         <Grid padding="16px 0px">
           <Input label="Password" placeholder="Type Password" _onChange={()=>{console.log('Password has been typed!')}}/>
         </Grid>
-        <Button text="LogIn" _onClick={() => {login(); deleteCookie("user_id");}}></Button>
+        <Button text="LogIn" _onClick={() => {console.log('logged in!'); login();}}></Button>
       </Grid>
     </React.Fragment>
   )
