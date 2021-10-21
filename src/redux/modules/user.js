@@ -9,7 +9,7 @@ const GET_USER = "GET_USER";
 
 // action creators
 const logIn = createAction(LOG_IN, (user) => ({user}));
-const logOUt = createAction(LOG_OUT, (user) => ({user}));
+const logOut = createAction(LOG_OUT, (user) => ({user}));
 const getUser = createAction(GET_USER, (user) => ({user}));
 
 // initialState
@@ -18,6 +18,16 @@ const initialState = {
   is_login: false,
 }
 
+// middleware actions
+const loginAction = (user) => {
+  return function(dispatch, getState, {history}) {
+    console.log(history)
+    dispatch(logIn(user));
+    history.push('/');
+  }
+}
+
+
 // reducer
 export default handleActions({
   [LOG_IN] : (state, action) => produce(state, (draft) =>{
@@ -25,15 +35,20 @@ export default handleActions({
     draft.user = action.payload.user;
     draft.is_login = true
   }),
-  [LOG_OUT] : (state, action) => produce(state, (draft) =>{}),
+  [LOG_OUT] : (state, action) => produce(state, (draft) =>{
+    deleteCookie("is_login");
+    draft.user = null;
+    draft.is_login = false;
+  }),
   [GET_USER] : (state, action) => produce(state, (draft) => {}),
 }, initialState);
 
 // action creator export
 const actionCreators = {
   logIn,
-  logOUt,
+  logOut,
   getUser,
+  loginAction,
 }
 
 export { actionCreators };

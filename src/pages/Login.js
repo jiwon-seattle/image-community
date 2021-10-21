@@ -2,11 +2,13 @@ import React from "react";
 import {Text, Input, Grid, Button} from "../elements"
 import { getCookie, setCookie, deleteCookie } from "../shared/Cookie";
 
+import {useDispatch} from "react-redux";
+import {actionCreators as userActions} from "../redux/modules/user";
+
 const Login = (props) => {
-  console.log(getCookie('user_id'));
+  const dispatch = useDispatch();
   const login = () => {
-    setCookie("user_id", 'jiwon', 3);
-    setCookie("user_pwd", 'jiwon7', 3);
+    dispatch(userActions.loginAction({user_name: 'jiwon'}));
   }
   return (
     <React.Fragment>
