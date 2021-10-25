@@ -8,7 +8,7 @@ const Input = (props) => {
   if (multiline) {
     return (
       <Grid>
-        <Text margin="0px">{label}</Text>
+        {label && <Text margin="0px">{label}</Text>}
         <ElTextarea rows={10} placeholder={placeholder} onChange={_onChange} />
       </Grid>
     );
@@ -16,7 +16,7 @@ const Input = (props) => {
   return (
     <React.Fragment>
       <Grid>
-        <Text margin="0px">{label}</Text>
+        {label && <Text margin="0px">{label}</Text>}
         <ElInput type={type} placeholder={placeholder} onChange={_onChange} />
       </Grid>
     </React.Fragment>
@@ -25,7 +25,7 @@ const Input = (props) => {
 
 Input.defaultProps = {
   multiline: false,
-  label: "Text",
+  label: false,
   placeholder: "Please type",
   type: "text",
   _onChange: () => {},

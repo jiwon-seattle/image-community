@@ -2,7 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
-  const { text, _onClick, background, color, is_float, children } = props;
+  const {
+    text,
+    _onClick,
+    background,
+    color,
+    is_float,
+    children,
+    margin,
+    width,
+  } = props;
   if (is_float) {
     return (
       <React.Fragment>
@@ -11,9 +20,19 @@ const Button = (props) => {
     );
   }
 
+  const styles = {
+    margin: margin,
+    width: width,
+  };
+
   return (
     <React.Fragment>
-      <ElButton onClick={_onClick} background={background} color={color}>
+      <ElButton
+        {...styles}
+        onClick={_onClick}
+        background={background}
+        color={color}
+      >
         {text ? text : children}
       </ElButton>
     </React.Fragment>
@@ -23,19 +42,22 @@ const Button = (props) => {
 Button.defaultProps = {
   text: false,
   children: null,
-  background: "#212121",
-  color: "#ffffff",
+  // background: "#212121",
+  // color: "#ffffff",
   _onClick: () => {},
   is_float: false,
+  margin: false,
+  width: "100%",
 };
 
 const ElButton = styled.button`
-  width: 100%;
+  width: ${(props) => props.width};
   ${(props) => (props.background ? `background: ${props.background};` : "")};
   ${(props) => (props.color ? `color: ${props.color};` : "")};
   padding: 12px 0px;
   box-sizing: border-box;
   border: none;
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
 `;
 
 const FloatButton = styled.button`
