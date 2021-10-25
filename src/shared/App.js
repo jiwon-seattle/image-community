@@ -8,6 +8,7 @@ import { history } from "../redux/configureStore";
 import PostList from "../pages/PostList";
 import Login from "../pages/Login";
 import SignUp from "../pages/Signup";
+import PostWrite from "../pages/PostWrite";
 
 import Header from "../components/Header";
 import { Grid, Button } from "../elements";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" exact component={PostList} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={SignUp} />
+          <Route path="/write" exact component={PostWrite} />
         </ConnectedRouter>
       </Grid>
       <Permit>

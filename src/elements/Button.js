@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
-  const { text, _onClick, background, color, is_float } = props;
+  const { text, _onClick, background, color, is_float, children } = props;
   if (is_float) {
     return (
       <React.Fragment>
-        <FloatButton onClick={_onClick}>{text}</FloatButton>
+        <FloatButton onClick={_onClick}>{text ? text : children}</FloatButton>
       </React.Fragment>
     );
   }
@@ -14,14 +14,15 @@ const Button = (props) => {
   return (
     <React.Fragment>
       <ElButton onClick={_onClick} background={background} color={color}>
-        {text}
+        {text ? text : children}
       </ElButton>
     </React.Fragment>
   );
 };
 
 Button.defaultProps = {
-  text: "Text",
+  text: false,
+  children: null,
   background: "#212121",
   color: "#ffffff",
   _onClick: () => {},

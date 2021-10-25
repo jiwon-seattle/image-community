@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
+import { emailCheck } from "../shared/common";
+
 const Login = (props) => {
   const dispatch = useDispatch();
 
@@ -14,7 +16,11 @@ const Login = (props) => {
 
   const login = () => {
     if (id === "" || pwd === "") {
-      window.alert("Id or Password is empthy. Please fill");
+      // window.alert("Id or Password is empthy. Please fill");
+      return;
+    }
+    if (!emailCheck(id)) {
+      window.alert("Email is not allowed");
       return;
     }
     dispatch(userActions.loginFB(id, pwd));
