@@ -11,6 +11,7 @@ const Permit = (props) => {
   if (is_session && is_login) {
     return <React.Fragment>{props.children}</React.Fragment>;
   }
+  return null;
 };
 
 export default Permit;

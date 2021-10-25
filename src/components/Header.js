@@ -8,7 +8,7 @@ import { actionCreators as userActions } from "../redux/modules/user";
 import { history } from "../redux/configureStore";
 import { apiKey } from "../shared/firebase";
 
-import { Permit } from "../shared/Permit";
+import Permit from "../shared/Permit";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Header = (props) => {
 
   // }
   <Permit>
-    return (
+    {/* return ( */}
     <React.Fragment>
       <Grid is_flex padding="4px 16px">
         <Grid>
@@ -48,7 +48,7 @@ const Header = (props) => {
         </Grid>
       </Grid>
     </React.Fragment>
-    );
+    {/* ); */}
   </Permit>;
   return (
     <React.Fragment>

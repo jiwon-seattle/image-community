@@ -10,12 +10,14 @@ import Login from "../pages/Login";
 import SignUp from "../pages/Signup";
 
 import Header from "../components/Header";
-import { Grid } from "../elements";
+import { Grid, Button } from "../elements";
 
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 
 import { apiKey } from "./firebase";
+
+import Permit from "./Permit";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,6 +40,9 @@ function App() {
           <Route path="/signup" exact component={SignUp} />
         </ConnectedRouter>
       </Grid>
+      <Permit>
+        <Button is_float={true} text="+"></Button>
+      </Permit>
     </React.Fragment>
   );
 }
