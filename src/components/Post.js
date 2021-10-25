@@ -21,10 +21,6 @@ const Post = (props) => {
             Comments: {props.comment_cnt}
           </Text>
         </Grid>
-        {/* <div>user profile / user name / insert_dt</div>
-        <div>contents</div>
-        <div>image</div>
-        <div>comment cnt</div> */}
       </Grid>
     </React.Fragment>
   );
