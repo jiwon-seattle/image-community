@@ -87,6 +87,34 @@ const signUpFB = (id, pwd, user_name) => {
   };
 };
 
+const loginCheckFB = () => {
+  return function (dispatch, getstate, { history }) {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(
+          setUser({
+            user_name: user.displayName,
+            user_profile: "",
+            id: user.email,
+            uid: user.uid,
+          })
+        );
+      } else {
+        dispatch(logOut());
+      }
+    });
+  };
+};
+
+const logoutFB = () => {
+  return function (dispatch, getState, { history }) {
+    auth.signOut().then(() => {
+      dispatch(logOut());
+      history.replace("/");
+    });
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -107,25 +135,6 @@ export default handleActions(
   initialState
 );
 
-const loginCheckFB = () => {
-  return function (dispatch, getstate, { history }) {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        dispatch(
-          setUser({
-            user_name: user.displayName,
-            user_profile: "",
-            id: user.email,
-            uid: user.uid,
-          })
-        );
-      } else {
-        dispatch(logOut());
-      }
-    });
-  };
-};
-
 // action creator export
 const actionCreators = {
   logOut,
@@ -133,6 +142,7 @@ const actionCreators = {
   loginFB,
   signUpFB,
   loginCheckFB,
+  logoutFB,
 };
 
 export { actionCreators };
