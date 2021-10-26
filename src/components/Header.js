@@ -10,6 +10,8 @@ import { apiKey } from "../shared/firebase";
 
 import Permit from "../shared/Permit";
 
+/* eslint-disable */
+
 const Header = (props) => {
   const dispatch = useDispatch();
   const is_logIn = useSelector((state) => state.user.is_login);
