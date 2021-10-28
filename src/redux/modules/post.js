@@ -1,8 +1,11 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { firestore } from "../../shared/firebase";
+import { firestore, storage } from "../../shared/firebase";
 import "moment";
 import moment from "moment";
+
+import { actionCreators as imageActions } from "./image";
+
 //actions
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
@@ -42,16 +45,43 @@ const addPostFB = (contents = "") => {
       contents: contents,
       insert_dp: moment().format("YYY-MM-DD hh:mm:ss"),
     };
-    postDB
-      .add({ ..._user_info, ..._post })
-      .then((doc) => {
-        let post = { _user_info, ..._post, id: doc.id };
-        dispatch(addPost(post));
-        history.replace("/");
-      })
-      .catch((err) => {
-        console.log("post failed to added", err);
-      });
+    const _image = getState().image.preview;
+
+    console.log(_image);
+    console.log(typeof _image);
+
+    const _upload = storage
+      .ref(`images/${_user_info.user_id}_${new Date().getTime()}`)
+      .putString(_image, "data_url");
+
+    _upload.then((snapshot) => {
+      snapshot.ref
+        .getDownloadURL()
+        .then((url) => {
+          console.log(url);
+
+          return url;
+        })
+        .then((url) => {
+          postDB
+            .add({ ..._user_info, ..._post, image_url: url })
+            .then((doc) => {
+              console.log(url);
+              let post = { _user_info, ..._post, id: doc.id, image_url: url };
+              dispatch(addPost(post));
+              history.replace("/");
+              dispatch(imageActions.setPreview(null));
+            })
+            .catch((err) => {
+              window.alert("Ah! There is a problem with writing a post!");
+              console.log("post failed to added", err);
+            });
+        })
+        .catch((err) => {
+          window.alert("Ah! There is a problem with uploading the image");
+          console.log("Ah! There is a problem with uploading the image", err);
+        });
+    });
   };
 };
 const getPostFB = () => {
