@@ -3,8 +3,13 @@ import React from "react";
 import { Button } from "../elements";
 import { storage } from "./firebase";
 
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as imageActions } from "../redux/modules/image";
+
 const Upload = (props) => {
   const fileInput = React.useRef();
+  const is_uploading = useSelector((state) => state.image.uploading);
+  const dispatch = useDispatch();
 
   const selectFile = (e) => {
     console.log(e);
@@ -14,18 +19,16 @@ const Upload = (props) => {
   };
   const uploadFB = () => {
     let image = fileInput.current.files[0];
-    const _upload = storage.ref(`images/${image.name}`).put(image);
-    _upload.then((snapshot) => {
-      console.log(snapshot);
-
-      snapshot.ref.getDownloadURL().then((url) => {
-        console.log(url);
-      });
-    });
+    dispatch(imageActions.uploadImageFB(image));
   };
   return (
     <React.Fragment>
-      <input type="file" onChange={selectFile} ref={fileInput} />
+      <input
+        type="file"
+        onChange={selectFile}
+        ref={fileInput}
+        disabled={is_uploading}
+      />
       <Button _onClick={uploadFB}>Upload</Button>
     </React.Fragment>
   );
