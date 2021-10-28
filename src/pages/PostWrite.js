@@ -10,7 +10,7 @@ const PostWrite = (props) => {
   const dispatch = useDispatch();
 
   const is_login = useSelector((state) => state.user.is_login);
-  console.log(is_login);
+  const preview = useSelector((state) => state.image.preview);
 
   const { history } = props;
 
@@ -55,7 +55,10 @@ const PostWrite = (props) => {
             Preview
           </Text>
         </Grid>
-        <Image shape="rectangle" />
+        <Image
+          shape="rectangle"
+          src={preview ? preview : "https://via.placeholder.com/400x300"}
+        />
       </Grid>
       <Grid padding="16px">
         <Input
