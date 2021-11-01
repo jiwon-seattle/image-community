@@ -146,6 +146,31 @@ const addPostFB = (contents = "") => {
 const getPostFB = () => {
   return function (dispatch, getstate, { history }) {
     const postDB = firestore.collection("post");
+
+    let query = postDB.orderBy("insert_dp", "desc").limit(2);
+    query.get().then((docs) => {
+      let post_list = [];
+      docs.forEach((doc) => {
+        let _post = doc.data();
+        // ['comment_cnt', 'contents', ....]
+        let post = Object.keys(_post).reduce(
+          (acc, cur) => {
+            if (cur.indexOf("user_") !== -1) {
+              return {
+                ...acc,
+                user_info: { ...acc.user_info },
+                [cur]: _post[cur],
+              };
+            }
+            return { ...acc, [cur]: _post[cur] };
+          },
+          { id: doc.id, user_info: {} }
+        );
+        post_list.push(post);
+      });
+      dispatch(setPost(post_list));
+    });
+    return;
     postDB.get().then((docs) => {
       let post_list = [];
       docs.forEach((doc) => {
