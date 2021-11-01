@@ -34,22 +34,18 @@ const Header = (props) => {
         </Grid>
         <Grid is_flex>
           <Button
-            text="My Information"
-            background="#C4C4C4"
-            color="black"
-          ></Button>
-          <Button text="Notice" background="#C4C4C4" color="black"></Button>
-          <Button
-            text="Log Out"
-            background="#C4C4C4"
-            color="black"
+            text="LogIn"
             _onClick={() => {
-              dispatch(userActions.logoutFB());
+              history.push("/login");
             }}
+            background="#C4C4C4"
+            color="black"
           ></Button>
+          <Button text="Join" background="#C4C4C4" color="black"></Button>
         </Grid>
       </Grid>
     </React.Fragment>
+
     {/* ); */}
   </Permit>;
   return (
@@ -62,14 +58,26 @@ const Header = (props) => {
         </Grid>
         <Grid is_flex>
           <Button
-            text="LogIn"
-            _onClick={() => {
-              history.push("/login");
-            }}
+            text="My Information"
             background="#C4C4C4"
             color="black"
           ></Button>
-          <Button text="Join" background="#C4C4C4" color="black"></Button>
+          <Button
+            _onClick={() => {
+              history.push("/noti");
+            }}
+            text="Notice"
+            background="#C4C4C4"
+            color="black"
+          ></Button>
+          <Button
+            text="Log Out"
+            background="#C4C4C4"
+            color="black"
+            _onClick={() => {
+              dispatch(userActions.logoutFB());
+            }}
+          ></Button>
         </Grid>
       </Grid>
     </React.Fragment>

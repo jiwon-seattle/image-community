@@ -5,16 +5,38 @@ import Upload from "../shared/Upload";
 
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
+import { actionCreators as imageActions } from "../redux/modules/image";
 
 const PostWrite = (props) => {
   const dispatch = useDispatch();
 
   const is_login = useSelector((state) => state.user.is_login);
   const preview = useSelector((state) => state.image.preview);
+  const post_list = useSelector((state) => state.post.list);
+
+  console.log(props.match.params.id);
+
+  const post_id = props.match.params.id;
+  const is_edit = post_id ? true : false;
 
   const { history } = props;
 
-  const [contents, setContents] = React.useState("");
+  let _post = is_edit ? post_list.find((p) => p.id === post_id) : null;
+  console.log(_post);
+
+  const [contents, setContents] = React.useState(_post ? _post.contents : "");
+
+  React.useEffect(() => {
+    if (is_edit && !_post) {
+      alert("post information does not exist");
+      history.goBack();
+      return;
+    }
+
+    if (is_edit) {
+      dispatch(imageActions.setPreview(_post.image_url));
+    }
+  }, []);
 
   const changeContents = (e) => {
     setContents(e.target.value);
@@ -22,6 +44,10 @@ const PostWrite = (props) => {
 
   const addPost = () => {
     dispatch(postActions.addPostFB(contents));
+  };
+
+  const editPost = () => {
+    dispatch(postActions.editPostFB(post_id, { contents: contents }));
   };
 
   if (!is_login) {
@@ -45,7 +71,7 @@ const PostWrite = (props) => {
     <React.Fragment>
       <Grid padding="16px">
         <Text margin="0px" size="36px" bold>
-          Write the post
+          {is_edit ? "Edit Post" : "Write Post"}
         </Text>
         <Upload></Upload>
       </Grid>
@@ -62,6 +88,7 @@ const PostWrite = (props) => {
       </Grid>
       <Grid padding="16px">
         <Input
+          value={contents}
           _onChange={changeContents}
           label="Post content"
           placeholder="Fill the content"
@@ -69,13 +96,23 @@ const PostWrite = (props) => {
         ></Input>
       </Grid>
       <Grid padding="16px">
-        <Button
-          _onClick={() => {
-            addPost();
-          }}
-        >
-          Publish
-        </Button>
+        {is_edit ? (
+          <Button
+            text="Edit Content"
+            _onClick={() => {
+              editPost();
+            }}
+          >
+            Publish
+          </Button>
+        ) : (
+          <Button
+            text="Post Content"
+            _onClick={() => {
+              addPost();
+            }}
+          ></Button>
+        )}
       </Grid>
     </React.Fragment>
   );

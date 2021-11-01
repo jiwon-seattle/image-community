@@ -3,13 +3,18 @@ import styled from "styled-components";
 import { Text, Grid } from "../elements";
 
 const Input = (props) => {
-  const { label, placeholder, _onChange, type, multiline } = props;
+  const { label, placeholder, _onChange, type, multiline, value } = props;
 
   if (multiline) {
     return (
       <Grid>
         {label && <Text margin="0px">{label}</Text>}
-        <ElTextarea rows={10} placeholder={placeholder} onChange={_onChange} />
+        <ElTextarea
+          rows={10}
+          value={value}
+          placeholder={placeholder}
+          onChange={_onChange}
+        />
       </Grid>
     );
   }
@@ -28,6 +33,7 @@ Input.defaultProps = {
   label: false,
   placeholder: "Please type",
   type: "text",
+  value: "",
   _onChange: () => {},
 };
 
