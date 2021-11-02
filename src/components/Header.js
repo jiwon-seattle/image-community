@@ -18,13 +18,54 @@ const Header = (props) => {
   const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
   const is_session = sessionStorage.getItem(_session_key) ? true : false;
 
-  console.log(is_session);
-
-  // if (is_logIn && is_session) {
-
-  // }
-  <Permit>
-    {/* return ( */}
+  if (is_logIn && is_session) {
+    // }
+    // <Permit>
+    {
+      /* return ( */
+    }
+    {
+      /* console.log('hi') */
+    }
+    return (
+      <React.Fragment>
+        <Grid is_flex padding="4px 16px">
+          <Grid>
+            <Text size="24px" margin="0" bold>
+              Hello!
+            </Text>
+          </Grid>
+          <Grid is_flex>
+            <Button
+              text="My Information"
+              background="#C4C4C4"
+              color="black"
+            ></Button>
+            <Button
+              _onClick={() => {
+                history.push("/noti");
+              }}
+              text="Notice"
+              background="#C4C4C4"
+              color="black"
+            ></Button>
+            <Button
+              text="Log Out"
+              background="#C4C4C4"
+              color="black"
+              _onClick={() => {
+                dispatch(userActions.logoutFB());
+              }}
+            ></Button>
+          </Grid>
+        </Grid>
+      </React.Fragment>
+    );
+    {
+      /* </Permit>; */
+    }
+  }
+  return (
     <React.Fragment>
       <Grid is_flex padding="4px 16px">
         <Grid>
@@ -42,42 +83,6 @@ const Header = (props) => {
             color="black"
           ></Button>
           <Button text="Join" background="#C4C4C4" color="black"></Button>
-        </Grid>
-      </Grid>
-    </React.Fragment>
-
-    {/* ); */}
-  </Permit>;
-  return (
-    <React.Fragment>
-      <Grid is_flex padding="4px 16px">
-        <Grid>
-          <Text size="24px" margin="0" bold>
-            Hello!
-          </Text>
-        </Grid>
-        <Grid is_flex>
-          <Button
-            text="My Information"
-            background="#C4C4C4"
-            color="black"
-          ></Button>
-          <Button
-            _onClick={() => {
-              history.push("/noti");
-            }}
-            text="Notice"
-            background="#C4C4C4"
-            color="black"
-          ></Button>
-          <Button
-            text="Log Out"
-            background="#C4C4C4"
-            color="black"
-            _onClick={() => {
-              dispatch(userActions.logoutFB());
-            }}
-          ></Button>
         </Grid>
       </Grid>
     </React.Fragment>
