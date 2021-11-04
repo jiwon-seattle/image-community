@@ -3,7 +3,16 @@ import styled from "styled-components";
 import { Text, Grid } from "../elements";
 
 const Input = (props) => {
-  const { label, placeholder, _onChange, type, multiline, value } = props;
+  const {
+    label,
+    placeholder,
+    _onChange,
+    type,
+    multiline,
+    value,
+    is_submit,
+    onSubmit,
+  } = props;
 
   if (multiline) {
     return (
@@ -22,7 +31,21 @@ const Input = (props) => {
     <React.Fragment>
       <Grid>
         {label && <Text margin="0px">{label}</Text>}
-        <ElInput type={type} placeholder={placeholder} onChange={_onChange} />
+        {is_submit ? (
+          <ElInput
+            type={type}
+            placeholder={placeholder}
+            onChange={_onChange}
+            value={value}
+            onKeyPress={(e) => {
+              if (e.key == "Enter") {
+                onSubmit(e);
+              }
+            }}
+          />
+        ) : (
+          <ElInput type={type} placeholder={placeholder} onChange={_onChange} />
+        )}
       </Grid>
     </React.Fragment>
   );
@@ -34,6 +57,8 @@ Input.defaultProps = {
   placeholder: "Please type",
   type: "text",
   value: "",
+  is_submit: false,
+  onSdubmit: () => {},
   _onChange: () => {},
 };
 
