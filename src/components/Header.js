@@ -8,6 +8,8 @@ import { actionCreators as userActions } from "../redux/modules/user";
 import { history } from "../redux/configureStore";
 import { apiKey } from "../shared/firebase";
 
+import NotiBadge from "./NotiBadge";
+
 import Permit from "../shared/Permit";
 
 /* eslint-disable */
@@ -41,14 +43,19 @@ const Header = (props) => {
               background="#C4C4C4"
               color="black"
             ></Button>
-            <Button
+            {/* <Button
               _onClick={() => {
                 history.push("/noti");
               }}
               text="Notice"
               background="#C4C4C4"
               color="black"
-            ></Button>
+            ></Button> */}
+            <NotiBadge
+              _onClick={() => {
+                history.push("/noti");
+              }}
+            />
             <Button
               text="Log Out"
               background="#C4C4C4"
