@@ -12,7 +12,8 @@ const PostList = (props) => {
   const user_info = useSelector((state) => state.user.user);
   const is_loading = useSelector((state) => state.post.is_loading);
   const paging = useSelector((state) => state.post.paging);
-
+  console.log("test");
+  console.log(post_list);
   const { history } = props;
 
   React.useEffect(() => {
