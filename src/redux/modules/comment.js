@@ -62,9 +62,23 @@ const addCommentFB = (post_id, contents) => {
               })
             );
             console.log(post);
-            const notiDB = realtime.ref(`noti/${post.user_id}`);
-
-            notiDB.update({ read: false });
+            const _noti_item = realtime.ref(`noti/${post.user_id}/list`).push();
+            _noti_item.set(
+              {
+                post_id: post.id,
+                user_name: comment.user_name,
+                image_url: post.image_url,
+                insert_dt: comment.insert_dt,
+              },
+              (error) => {
+                if (error) {
+                  console.log("Alarm saving failed! ", error);
+                } else {
+                  const notiDB = realtime.ref(`noti/${post.user_id}`);
+                  notiDB.update({ read: false });
+                }
+              }
+            );
           }
         });
     });

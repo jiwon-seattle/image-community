@@ -14,14 +14,16 @@ const NotiBadge = (props) => {
     props._onClick();
   };
   React.useEffect(() => {
-    console.log(user_id);
-    const notiDB = realtime.ref(`noti/${user_id}`);
-    notiDB.on("value", (snapshot) => {
-      console.log(snapshot.val());
-      setIsRead(snapshot.val().read);
-    });
-    return () => notiDB.off();
-  }, []);
+    if (user_id) {
+      console.log(user_id);
+      const notiDB = realtime.ref(`noti/${user_id}`);
+      notiDB.on("value", (snapshot) => {
+        console.log(snapshot.val());
+        setIsRead(snapshot.val().read);
+      });
+      return () => notiDB.off();
+    }
+  }, [user_id]);
   return (
     <React.Fragment>
       <Badge

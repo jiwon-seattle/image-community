@@ -89,7 +89,14 @@ const Header = (props) => {
             background="#C4C4C4"
             color="black"
           ></Button>
-          <Button text="Join" background="#C4C4C4" color="black"></Button>
+          <Button
+            text="Join"
+            _onClick={() => {
+              history.push("/signup");
+            }}
+            background="#C4C4C4"
+            color="black"
+          ></Button>
         </Grid>
       </Grid>
     </React.Fragment>
