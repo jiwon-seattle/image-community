@@ -13,15 +13,14 @@ const Login = (props) => {
   const [pwd, setPwd] = React.useState("");
 
   const login = () => {
-
     console.log(id);
 
-    if(id === "" || pwd === ""){
+    if (id === "" || pwd === "") {
       window.alert("아이디 혹은 비밀번호가 공란입니다! 입력해주세요!");
       return;
     }
 
-    if(!emailCheck(id)){
+    if (!emailCheck(id)) {
       window.alert("이메일 형식이 맞지 않습니다!");
       return;
     }
@@ -33,13 +32,13 @@ const Login = (props) => {
     <React.Fragment>
       <Grid padding="16px">
         <Text size="32px" bold>
-          로그인
+          Log In
         </Text>
 
         <Grid padding="16px 0px">
           <Input
-            label="아이디"
-            placeholder="아이디를 입력해주세요."
+            label="ID"
+            placeholder="Please enter an ID"
             _onChange={(e) => {
               setId(e.target.value);
             }}
@@ -48,8 +47,8 @@ const Login = (props) => {
 
         <Grid padding="16px 0px">
           <Input
-            label="패스워드"
-            placeholder="패스워드 입력해주세요."
+            label="Password"
+            placeholder="Please enter a password"
             type="password"
             _onChange={(e) => {
               setPwd(e.target.value);
@@ -61,7 +60,7 @@ const Login = (props) => {
         </Grid>
 
         <Button
-          text="로그인하기"
+          text="Log In"
           _onClick={() => {
             console.log("로그인 했어!");
             login();
