@@ -1,12 +1,12 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
+
 import { setCookie, getCookie, deleteCookie } from "../../shared/Cookie";
 
 import { auth } from "../../shared/firebase";
 import firebase from "firebase/compat/app";
 
 // actions
-const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SET_USER = "SET_USER";
@@ -22,10 +22,6 @@ const initialState = {
   is_login: false,
 };
 
-const user_initial = {
-  user_name: "jiwon",
-};
-
 // middleware actions
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
@@ -34,6 +30,7 @@ const loginFB = (id, pwd) => {
         .signInWithEmailAndPassword(id, pwd)
         .then((user) => {
           console.log(user);
+
           dispatch(
             setUser({
               user_name: user.user.displayName,
@@ -42,24 +39,26 @@ const loginFB = (id, pwd) => {
               uid: user.user.uid,
             })
           );
+
           history.push("/");
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          console.log(errorCode);
-          console.log(errorMessage);
+
+          console.log(errorCode, errorMessage);
         });
     });
   };
 };
-const signUpFB = (id, pwd, user_name) => {
+
+const signupFB = (id, pwd, user_name) => {
   return function (dispatch, getState, { history }) {
     auth
       .createUserWithEmailAndPassword(id, pwd)
       .then((user) => {
-        // Signed in
         console.log(user);
+
         auth.currentUser
           .updateProfile({
             displayName: user_name,
@@ -75,12 +74,17 @@ const signUpFB = (id, pwd, user_name) => {
             );
             history.push("/");
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+          });
+
+        // Signed in
         // ...
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+
         console.log(errorCode, errorMessage);
         // ..
       });
@@ -88,7 +92,7 @@ const signUpFB = (id, pwd, user_name) => {
 };
 
 const loginCheckFB = () => {
-  return function (dispatch, getstate, { history }) {
+  return function (dispatch, getState, { history }) {
     auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch(
@@ -139,30 +143,10 @@ export default handleActions(
 const actionCreators = {
   logOut,
   getUser,
+  signupFB,
   loginFB,
-  signUpFB,
   loginCheckFB,
   logoutFB,
 };
 
 export { actionCreators };
-
-// const logIn = (user) => {
-//   return {
-//     type: LOG_IN,
-//     user
-//   }
-// }
-
-// const reducer = handleActions({
-//   [LOG_IN]: (state, action = > {
-
-//   })
-// },initialState={});
-// const reducer = (state = {}, action = {}) => {
-//   switch(action.type) {
-//     case "LOG_IN" : {
-//       state.user = action.user;
-//     }
-//   }
-// }

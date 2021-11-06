@@ -10,20 +10,22 @@ const NotiBadge = (props) => {
   const user_id = useSelector((state) => state.user.user.uid);
   const notiCheck = () => {
     const notiDB = realtime.ref(`noti/${user_id}`);
-    notiDB.update({ read: true });
+    notiDB.update({read: true});
     props._onClick();
   };
+
   React.useEffect(() => {
-    if (user_id) {
-      console.log(user_id);
-      const notiDB = realtime.ref(`noti/${user_id}`);
-      notiDB.on("value", (snapshot) => {
-        console.log(snapshot.val());
-        setIsRead(snapshot.val().read);
-      });
-      return () => notiDB.off();
-    }
-  }, [user_id]);
+    const notiDB = realtime.ref(`noti/${user_id}`);
+
+    notiDB.on("value", (snapshot) => {
+      console.log(snapshot.val());
+
+      setIsRead(snapshot.val().read);
+    });
+
+    return () => notiDB.off();
+  }, []);
+
   return (
     <React.Fragment>
       <Badge
@@ -32,7 +34,7 @@ const NotiBadge = (props) => {
         invisible={is_read}
         onClick={notiCheck}
       >
-        <NotificationsIcon></NotificationsIcon>
+        <NotificationsIcon />
       </Badge>
     </React.Fragment>
   );
@@ -41,4 +43,5 @@ const NotiBadge = (props) => {
 NotiBadge.defaultProps = {
   _onClick: () => {},
 };
+
 export default NotiBadge;

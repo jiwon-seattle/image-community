@@ -1,52 +1,58 @@
 import React from "react";
 import _ from "lodash";
-import { Spinner } from "../elements";
+import {Spinner} from "../elements";
 
 const InfinityScroll = (props) => {
-  const { children, callNext, is_next, loading } = props;
-  console.log(loading);
-  const _handleScroll = _.throttle(() => {
-    if (loading) {
-      return;
-    }
-    const { innerHeight } = window;
-    const { scrollHeight } = document.body;
-    const scrollTop =
-      (document.documentElement && document.documentElement.scrollTop) ||
-      document.body.scrollTop;
-    if (scrollHeight - innerHeight - scrollTop < 200) {
-      callNext();
-    }
-  }, 300);
 
-  const handleScroll = React.useCallback(_handleScroll, [loading]);
+    const {children, callNext, is_next, loading} = props;
 
-  React.useEffect(() => {
-    if (loading) {
-      return;
-    }
+    const _handleScroll = _.throttle(() => {
 
-    if (is_next) {
-      window.addEventListener("scroll", handleScroll);
-    } else {
-      window.removeEventListener("scroll", handleScroll);
-    }
+        if(loading){
+            return;
+        }
 
-    return () => window.removeEventListener("scroll", handleScroll); // clean up, unmount
-  }, [is_next, loading]);
-  return (
-    <React.Fragment>
-      {props.children}
-      {is_next && <Spinner />}
-    </React.Fragment>
-  );
-};
+        const {innerHeight} = window;
+        const {scrollHeight} = document.body;
+
+        const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+        
+        if(scrollHeight - innerHeight - scrollTop < 200) {
+            callNext();
+        }
+    }, 300);
+
+    const handleScroll = React.useCallback(_handleScroll, [loading]);
+
+    React.useEffect(() => {
+        
+        if(loading){
+            return;
+        }
+
+        if(is_next){
+            window.addEventListener("scroll", handleScroll);
+        }else{
+            window.removeEventListener("scroll", handleScroll);
+        }
+        
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [is_next, loading]);
+
+    return (
+        <React.Fragment>
+            {props.children}
+            {is_next && (<Spinner/>)}
+        </React.Fragment>
+    )
+}
 
 InfinityScroll.defaultProps = {
-  children: null,
-  callNext: () => {},
-  is_next: false,
-  loading: false,
-};
+    children: null,
+    callNext: () => {},
+    is_next: false,
+    loading: false,
+}
 
 export default InfinityScroll;

@@ -1,10 +1,11 @@
+// PostList.js
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Post from "../components/Post";
-import { Grid } from "../elements";
 import { actionCreators as postActions } from "../redux/modules/post";
 import InfinityScroll from "../shared/InfinityScroll";
+import { Grid } from "../elements";
 
 const PostList = (props) => {
   const dispatch = useDispatch();
@@ -12,8 +13,7 @@ const PostList = (props) => {
   const user_info = useSelector((state) => state.user.user);
   const is_loading = useSelector((state) => state.post.is_loading);
   const paging = useSelector((state) => state.post.paging);
-  console.log("test");
-  console.log(post_list);
+
   const { history } = props;
 
   React.useEffect(() => {
@@ -21,9 +21,11 @@ const PostList = (props) => {
       dispatch(postActions.getPostFB());
     }
   }, []);
+  console.log(post_list);
   return (
     <React.Fragment>
-      <Grid bg={"#EFF6FF"} padding="20px 0px 20px 0px">
+      <Grid bg={"#EFF6FF"} padding="20px 0px">
+        {/* <Post/> */}
         <InfinityScroll
           callNext={() => {
             dispatch(postActions.getPostFB(paging.next));
@@ -36,26 +38,25 @@ const PostList = (props) => {
               return (
                 <Grid
                   bg="#ffffff"
-                  margin="20px 0px 20px 0px"
+                  margin="8px 0px"
                   key={p.id}
                   _onClick={() => {
                     history.push(`/post/${p.id}`);
                   }}
                 >
-                  <Post {...p} is_me></Post>
+                  <Post key={p.id} {...p} is_me />
                 </Grid>
               );
             } else {
               return (
                 <Grid
-                  bg="#ffffff"
-                  margin="20px 0px 20px 0px"
                   key={p.id}
+                  bg="#ffffff"
                   _onClick={() => {
                     history.push(`/post/${p.id}`);
                   }}
                 >
-                  <Post {...p}></Post>
+                  <Post {...p} />
                 </Grid>
               );
             }

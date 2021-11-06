@@ -10,56 +10,35 @@ import { apiKey } from "../shared/firebase";
 
 import NotiBadge from "./NotiBadge";
 
-import Permit from "../shared/Permit";
-
-/* eslint-disable */
-
 const Header = (props) => {
   const dispatch = useDispatch();
-  const is_logIn = useSelector((state) => state.user.is_login);
-  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
-  const is_session = sessionStorage.getItem(_session_key) ? true : false;
+  const is_login = useSelector((state) => state.user.is_login);
 
-  if (is_logIn && is_session) {
-    // }
-    // <Permit>
-    {
-      /* return ( */
-    }
-    {
-      /* console.log('hi') */
-    }
+  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
+
+  const is_session = sessionStorage.getItem(_session_key)? true : false;
+  
+  console.log(is_session);
+
+  if (is_login && is_session) {
     return (
       <React.Fragment>
         <Grid is_flex padding="4px 16px">
           <Grid>
-            <Text size="24px" margin="0" bold>
-              Hello!
+            <Text margin="0px" size="24px" bold>
+              헬로
             </Text>
           </Grid>
+
           <Grid is_flex>
-            <Button
-              text="My Information"
-              background="#C4C4C4"
-              color="black"
-            ></Button>
-            {/* <Button
-              _onClick={() => {
-                history.push("/noti");
-              }}
-              text="Notice"
-              background="#C4C4C4"
-              color="black"
-            ></Button> */}
-            <NotiBadge
-              _onClick={() => {
-                history.push("/noti");
-              }}
+            <Button text="내정보"></Button>
+            
+            <NotiBadge _onClick={() => {
+              history.push("/noti");
+            }}
             />
             <Button
-              text="Log Out"
-              background="#C4C4C4"
-              color="black"
+              text="로그아웃"
               _onClick={() => {
                 dispatch(userActions.logoutFB());
               }}
@@ -68,34 +47,29 @@ const Header = (props) => {
         </Grid>
       </React.Fragment>
     );
-    {
-      /* </Permit>; */
-    }
   }
+
   return (
     <React.Fragment>
       <Grid is_flex padding="4px 16px">
         <Grid>
-          <Text size="24px" margin="0" bold>
-            Hello!
+          <Text margin="0px" size="24px" bold>
+            헬로
           </Text>
         </Grid>
+
         <Grid is_flex>
           <Button
-            text="LogIn"
+            text="로그인"
             _onClick={() => {
               history.push("/login");
             }}
-            background="#C4C4C4"
-            color="black"
           ></Button>
           <Button
-            text="Join"
+            text="회원가입"
             _onClick={() => {
               history.push("/signup");
             }}
-            background="#C4C4C4"
-            color="black"
           ></Button>
         </Grid>
       </Grid>

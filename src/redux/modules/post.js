@@ -6,7 +6,6 @@ import moment from "moment";
 
 import { actionCreators as imageActions } from "./image";
 
-//actions
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
@@ -21,40 +20,39 @@ const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post_id,
   post,
 }));
-
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
 const initialState = {
   list: [],
-  paging: { start: null, next: null, size: 2 },
+  paging: { start: null, next: null, size: 3 },
   is_loading: false,
 };
 
 const initialPost = {
   // id: 0,
   // user_info: {
-  //   user_name: "jiwon",
-  //   user_profile:
-  //     "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1886&q=80",
+  //   user_name: "mean0",
+  //   user_profile: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
   // },
-  image_url:
-    "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1886&q=80",
+  image_url: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
   contents: "",
   comment_cnt: 0,
-  insert_dp: moment().format("YYY-MM-DD hh:mm:ss"),
+  insert_dp: moment().format("YYYY-MM-DD hh:mm:ss"),
 };
 
 const editPostFB = (post_id = null, post = {}) => {
   return function (dispatch, getState, { history }) {
     if (!post_id) {
-      console.log("No post information");
+      console.log("게시물 정보가 없어요!");
       return;
     }
+
     const _image = getState().image.preview;
 
     const _post_idx = getState().post.list.findIndex((p) => p.id === post_id);
     const _post = getState().post.list[_post_idx];
-    // console.log(_post);
+
+    console.log(_post);
 
     const postDB = firestore.collection("post");
 
@@ -66,6 +64,8 @@ const editPostFB = (post_id = null, post = {}) => {
           dispatch(editPost(post_id, { ...post }));
           history.replace("/");
         });
+
+      return;
     } else {
       const user_id = getState().user.user.uid;
       const _upload = storage
@@ -90,8 +90,8 @@ const editPostFB = (post_id = null, post = {}) => {
               });
           })
           .catch((err) => {
-            window.alert("Ah! There is a problem with uploading the image");
-            console.log("Ah! There is a problem with uploading the image", err);
+            window.alert("앗! 이미지 업로드에 문제가 있어요!");
+            console.log("앗! 이미지 업로드에 문제가 있어요!", err);
           });
       });
     }
@@ -101,24 +101,28 @@ const editPostFB = (post_id = null, post = {}) => {
 const addPostFB = (contents = "") => {
   return function (dispatch, getState, { history }) {
     const postDB = firestore.collection("post");
+
     const _user = getState().user.user;
-    const _user_info = {
+
+    const user_info = {
       user_name: _user.user_name,
       user_id: _user.uid,
       user_profile: _user.user_profile,
     };
+
     const _post = {
       ...initialPost,
       contents: contents,
-      insert_dp: moment().format("YYY-MM-DD hh:mm:ss"),
+      insert_dp: moment().format("YYYY-MM-DD hh:mm:ss"),
     };
+
     const _image = getState().image.preview;
 
     console.log(_image);
     console.log(typeof _image);
 
     const _upload = storage
-      .ref(`images/${_user_info.user_id}_${new Date().getTime()}`)
+      .ref(`images/${user_info.user_id}_${new Date().getTime()}`)
       .putString(_image, "data_url");
 
     _upload.then((snapshot) => {
@@ -131,43 +135,50 @@ const addPostFB = (contents = "") => {
         })
         .then((url) => {
           postDB
-            .add({ ..._user_info, ..._post, image_url: url })
+            .add({ ...user_info, ..._post, image_url: url })
             .then((doc) => {
-              console.log(url);
-              let post = { _user_info, ..._post, id: doc.id, image_url: url };
+              let post = { user_info, ..._post, id: doc.id, image_url: url };
               dispatch(addPost(post));
               history.replace("/");
+
               dispatch(imageActions.setPreview(null));
             })
             .catch((err) => {
-              window.alert("Ah! There is a problem with writing a post!");
-              console.log("post failed to added", err);
+              window.alert("앗! 포스트 작성에 문제가 있어요!");
+              console.log("post 작성에 실패했어요!", err);
             });
         })
         .catch((err) => {
-          window.alert("Ah! There is a problem with uploading the image");
-          console.log("Ah! There is a problem with uploading the image", err);
+          window.alert("앗! 이미지 업로드에 문제가 있어요!");
+          console.log("앗! 이미지 업로드에 문제가 있어요!", err);
         });
     });
   };
 };
-const getPostFB = (start = null, size = 2) => {
+
+const getPostFB = (start = null, size = 3) => {
   return function (dispatch, getState, { history }) {
     let _paging = getState().post.paging;
+
     if (_paging.start && !_paging.next) {
       return;
     }
+
     dispatch(loading(true));
     const postDB = firestore.collection("post");
+
     let query = postDB.orderBy("insert_dp", "desc");
+
     if (start) {
       query = query.startAt(start);
     }
+
     query
       .limit(size + 1)
       .get()
       .then((docs) => {
         let post_list = [];
+
         let paging = {
           start: docs.docs[0],
           next:
@@ -176,50 +187,33 @@ const getPostFB = (start = null, size = 2) => {
               : null,
           size: size,
         };
+
         docs.forEach((doc) => {
           let _post = doc.data();
-          // ['comment_cnt', 'contents', ....]
+
+          // ['commenct_cnt', 'contents', ..]
           let post = Object.keys(_post).reduce(
             (acc, cur) => {
               if (cur.indexOf("user_") !== -1) {
                 return {
                   ...acc,
-                  user_info: { ...acc.user_info },
-                  [cur]: _post[cur],
+                  user_info: { ...acc.user_info, [cur]: _post[cur] },
                 };
               }
               return { ...acc, [cur]: _post[cur] };
             },
             { id: doc.id, user_info: {} }
           );
+
           post_list.push(post);
         });
+
         post_list.pop();
+
+        console.log(post_list);
+
         dispatch(setPost(post_list, paging));
       });
-    return;
-    postDB.get().then((docs) => {
-      let post_list = [];
-      docs.forEach((doc) => {
-        let _post = doc.data();
-        // ['comment_cnt', 'contents', ....]
-        let post = Object.keys(_post).reduce(
-          (acc, cur) => {
-            if (cur.indexOf("user_") !== -1) {
-              return {
-                ...acc,
-                user_info: { ...acc.user_info },
-                [cur]: _post[cur],
-              };
-            }
-            return { ...acc, [cur]: _post[cur] };
-          },
-          { id: doc.id, user_info: {} }
-        );
-        post_list.push(post);
-      });
-      dispatch(setPost(post_list));
-    });
   };
 };
 
@@ -230,14 +224,16 @@ const getOnePostFB = (id) => {
       .doc(id)
       .get()
       .then((doc) => {
+        console.log(doc);
+        console.log(doc.data());
+
         let _post = doc.data();
         let post = Object.keys(_post).reduce(
           (acc, cur) => {
             if (cur.indexOf("user_") !== -1) {
               return {
                 ...acc,
-                user_info: { ...acc.user_info },
-                [cur]: _post[cur],
+                user_info: { ...acc.user_info, [cur]: _post[cur] },
               };
             }
             return { ...acc, [cur]: _post[cur] };
@@ -250,7 +246,6 @@ const getOnePostFB = (id) => {
   };
 };
 
-//reducer
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
@@ -259,19 +254,20 @@ export default handleActions(
 
         draft.list = draft.list.reduce((acc, cur) => {
           if (acc.findIndex((a) => a.id === cur.id) === -1) {
-            // if there is not duplicate
             return [...acc, cur];
           } else {
             acc[acc.findIndex((a) => a.id === cur.id)] = cur;
             return acc;
           }
         }, []);
+
         if (action.payload.paging) {
           draft.paging = action.payload.paging;
         }
 
         draft.is_loading = false;
       }),
+
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list.unshift(action.payload.post);
@@ -279,6 +275,7 @@ export default handleActions(
     [EDIT_POST]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+
         draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
       }),
     [LOADING]: (state, action) =>
@@ -294,9 +291,9 @@ const actionCreators = {
   addPost,
   editPost,
   getPostFB,
-  getOnePostFB,
   addPostFB,
   editPostFB,
+  getOnePostFB,
 };
 
 export { actionCreators };

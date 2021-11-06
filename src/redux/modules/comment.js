@@ -4,7 +4,7 @@ import { firestore, realtime } from "../../shared/firebase";
 import "moment";
 import moment from "moment";
 
-import firebase from "@firebase/app-compat";
+import firebase from "firebase/compat/app";
 
 import { actionCreators as postActions } from "./post";
 
@@ -33,6 +33,7 @@ const addCommentFB = (post_id, contents) => {
   return function (dispatch, getState, { history }) {
     const commentDB = firestore.collection("comment");
     const user_info = getState().user.user;
+
     let comment = {
       post_id: post_id,
       user_id: user_info.uid,
@@ -41,28 +42,32 @@ const addCommentFB = (post_id, contents) => {
       contents: contents,
       insert_dt: moment().format("YYYY-MM-DD hh:mm:ss"),
     };
+
     commentDB.add(comment).then((doc) => {
       const postDB = firestore.collection("post");
 
-      const post = getState().post.list.find((l) => l.id == post_id);
-      console.log(user_info);
+      const post = getState().post.list.find((l) => l.id === post_id);
 
-      // current value + 1
       const increment = firebase.firestore.FieldValue.increment(1);
+
       comment = { ...comment, id: doc.id };
       postDB
         .doc(post_id)
         .update({ comment_cnt: increment })
         .then((_post) => {
           dispatch(addComment(post_id, comment));
+
           if (post) {
             dispatch(
               postActions.editPost(post_id, {
                 comment_cnt: parseInt(post.comment_cnt) + 1,
               })
             );
-            console.log(post);
-            const _noti_item = realtime.ref(`noti/${post.user_id}/list`).push();
+
+            const _noti_item = realtime
+              .ref(`noti/${post.user_info.user_id}/list`)
+              .push();
+
             _noti_item.set(
               {
                 post_id: post.id,
@@ -70,11 +75,12 @@ const addCommentFB = (post_id, contents) => {
                 image_url: post.image_url,
                 insert_dt: comment.insert_dt,
               },
-              (error) => {
-                if (error) {
-                  console.log("Alarm saving failed! ", error);
+              (err) => {
+                if (err) {
+                  console.log("알림 저장에 실패했어요! 8ㅛ8");
                 } else {
-                  const notiDB = realtime.ref(`noti/${post.user_id}`);
+                  const notiDB = realtime.ref(`noti/${post.user_info.user_id}`);
+
                   notiDB.update({ read: false });
                 }
               }
@@ -87,38 +93,35 @@ const addCommentFB = (post_id, contents) => {
 
 const getCommentFB = (post_id = null) => {
   return function (dispatch, getState, { history }) {
-    const commentDB = firestore.collection("comment");
-
-    // post_id가 없으면 바로 리턴하기!
     if (!post_id) {
       return;
     }
 
-    // where로 게시글 id가 같은 걸 찾고,
-    // orderBy로 정렬해줍니다.
+    const commentDB = firestore.collection("comment");
+
     commentDB
       .where("post_id", "==", post_id)
       .orderBy("insert_dt", "desc")
       .get()
       .then((docs) => {
         let list = [];
+
         docs.forEach((doc) => {
           list.push({ ...doc.data(), id: doc.id });
         });
-        //   가져온 데이터를 넣어주자!
 
         dispatch(setComment(post_id, list));
       })
       .catch((err) => {
-        console.log("Failed to fetch comments!", post_id, err);
+        console.log("댓글 정보를 가져올 수가 없네요!", err);
       });
   };
 };
+
 export default handleActions(
   {
     [SET_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        // let data = {[post_id]: com_list, ....}
         draft.list[action.payload.post_id] = action.payload.comment_list;
       }),
     [ADD_COMMENT]: (state, action) =>
@@ -135,9 +138,9 @@ export default handleActions(
 
 const actionCreators = {
   getCommentFB,
+  addCommentFB,
   setComment,
   addComment,
-  addCommentFB,
 };
 
 export { actionCreators };
