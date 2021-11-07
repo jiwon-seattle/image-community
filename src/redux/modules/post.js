@@ -43,7 +43,7 @@ const initialPost = {
 const editPostFB = (post_id = null, post = {}) => {
   return function (dispatch, getState, { history }) {
     if (!post_id) {
-      console.log("게시물 정보가 없어요!");
+      console.log("There is no post information");
       return;
     }
 
@@ -90,8 +90,8 @@ const editPostFB = (post_id = null, post = {}) => {
               });
           })
           .catch((err) => {
-            window.alert("앗! 이미지 업로드에 문제가 있어요!");
-            console.log("앗! 이미지 업로드에 문제가 있어요!", err);
+            window.alert("Ah! There is a problem with uploading!");
+            console.log("Ah! There is a problem with uploading!", err);
           });
       });
     }

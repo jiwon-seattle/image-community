@@ -43,22 +43,22 @@ const PostWrite = (props) => {
   };
 
   const editPost = () => {
-    dispatch(postActions.editPostFB(post_id, {contents: contents}));
-  }
+    dispatch(postActions.editPostFB(post_id, { contents: contents }));
+  };
 
   if (!is_login) {
     return (
       <Grid margin="100px 0px" padding="16px" center>
         <Text size="32px" bold>
-          앗! 잠깐!
+          Ah! Wait!
         </Text>
-        <Text size="16px">로그인 후에만 글을 쓸 수 있어요!</Text>
+        <Text size="16px">You can write a post after you log in!</Text>
         <Button
           _onClick={() => {
             history.replace("/");
           }}
         >
-          로그인 하러가기
+          Log In!
         </Button>
       </Grid>
     );
@@ -68,7 +68,7 @@ const PostWrite = (props) => {
     <React.Fragment>
       <Grid padding="16px">
         <Text margin="0px" size="36px" bold>
-          {is_edit ? "게시글 수정" : "게시글 작성"}
+          {is_edit ? "Edit post" : "Write post"}
         </Text>
         <Upload />
       </Grid>
@@ -76,7 +76,7 @@ const PostWrite = (props) => {
       <Grid>
         <Grid padding="16px">
           <Text margin="0px" size="24px" bold>
-            미리보기
+            Preview
           </Text>
         </Grid>
 
@@ -90,17 +90,17 @@ const PostWrite = (props) => {
         <Input
           value={contents}
           _onChange={changeContents}
-          label="게시글 내용"
-          placeholder="게시글 작성"
+          label="Post content"
+          placeholder="Write post"
           multiLine
         />
       </Grid>
 
       <Grid padding="16px">
         {is_edit ? (
-          <Button text="게시글 수정" _onClick={editPost}></Button>
+          <Button text="Edit post" _onClick={editPost}></Button>
         ) : (
-          <Button text="게시글 작성" _onClick={addPost}></Button>
+          <Button text="Write post" _onClick={addPost}></Button>
         )}
       </Grid>
     </React.Fragment>
