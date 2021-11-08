@@ -19,7 +19,7 @@ Download the code and run `npm install && npm start`
 
 ## Hosting 
 
-currently, the product has been deployed to firebase.
+Currently, the product has been deployed to firebase.
 
 ```
 https://image-comm-10b01.firebaseapp.com/
