@@ -42,7 +42,7 @@ const Post = React.memo((props) => {
       </Grid>
     </React.Fragment>
   );
-};)
+});
 
 Post.defaultProps = {
   user_info: {
