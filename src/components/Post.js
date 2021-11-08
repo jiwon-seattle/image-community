@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid, Image, Text, Button } from "../elements";
 
-import {history} from "../redux/configureStore";
+import { history } from "../redux/configureStore";
 
- const Post = (props) => {
+const Post = (props) => {
   return (
     <React.Fragment>
       <Grid>
@@ -15,9 +15,14 @@ import {history} from "../redux/configureStore";
           <Grid is_flex width="auto">
             <Text>{props.insert_dt}</Text>
             {props.is_me && (
-              <Button width="auto" margin="4px" padding="4px" _onClick={() => {
-                history.push(`/write/${props.id}`);
-              }}>
+              <Button
+                width="auto"
+                margin="4px"
+                padding="4px"
+                _onClick={() => {
+                  history.push(`/write/${props.id}`);
+                }}
+              >
                 수정
               </Button>
             )}
@@ -42,10 +47,12 @@ import {history} from "../redux/configureStore";
 Post.defaultProps = {
   user_info: {
     user_name: "mean0",
-    user_profile: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+    user_profile:
+      "https://images.unsplash.com/photo-1520763185298-1b434c919102?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1332&q=80",
   },
-  image_url: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
-  contents: "고양이네요!",
+  image_url:
+    "https://images.unsplash.com/photo-1520763185298-1b434c919102?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1332&q=80",
+  contents: "Flower!",
   comment_cnt: 10,
   insert_dt: "2021-02-27 10:00:00",
   is_me: false,

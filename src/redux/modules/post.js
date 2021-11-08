@@ -34,7 +34,8 @@ const initialPost = {
   //   user_name: "mean0",
   //   user_profile: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
   // },
-  image_url: "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+  image_url:
+    "https://images.unsplash.com/photo-1520763185298-1b434c919102?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1332&q=80",
   contents: "",
   comment_cnt: 0,
   insert_dp: moment().format("YYYY-MM-DD hh:mm:ss"),
