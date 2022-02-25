@@ -7,7 +7,8 @@ Immage Community is a website that friends or families can share their momeries 
 1. SignIn and LogIn via Firebase Authentication
 2. Uploading and saving pictures to Firestore Database
 3. Comment Notification with Firebase Realtime Database
-4. Designed the webpage with stlyed components
+4. Infinite scrolling as per pages going down
+5. Designed the webpage with stlyed components
 
 ## Tech Stacks
 
